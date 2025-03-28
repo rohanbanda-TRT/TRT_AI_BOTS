@@ -16,3 +16,7 @@ pypdf>=3.17.1
 tiktoken>=0.5.1
 pillow>=10.0.0
 pytesseract>=0.3.10
+whisper
+python-multipart
+ffmpeg-python
+openai-whisper
