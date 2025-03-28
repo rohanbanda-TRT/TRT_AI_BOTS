@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .src.api.routes import router
+from .src.api.document_routes import router as document_router
 
-app = FastAPI(title="DSP Performance Analyzer API")
+app = FastAPI(title="TRT AI Bots API")
 
 # Add CORS middleware
 app.add_middleware(
@@ -13,8 +14,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include router
+# Include routers
 app.include_router(router)
+app.include_router(document_router, prefix="/api")
 
 if __name__ == "__main__":
     import uvicorn

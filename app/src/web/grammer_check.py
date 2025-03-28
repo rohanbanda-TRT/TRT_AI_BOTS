@@ -9,7 +9,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..
 sys.path.insert(0, project_root)
 
 # Import prompts
-from app.src.prompts.prompt import (
+from app.src.prompts.grammer_check import (
     GRAMMAR_PROMPT, 
     PLAGIARISM_PROMPT, 
     VOICE_CONVERSION_PROMPT, 

@@ -27,7 +27,7 @@ class AnswerVerifier:
             embedding_model: Name of the embedding model to use
         """
         self.pdf_processor = PDFProcessor(embedding_model=embedding_model)
-        self.vector_store = VectorStore(persist_directory=vector_store_dir)
+        self.vector_store = VectorStore(persist_directory=vector_store_dir, index_name="testverifier")
         self.qa_chain = QAChain(vector_store=self.vector_store, model_name=qa_model)
         self.image_processor = ImageProcessor()
         
