@@ -4,9 +4,6 @@ Streamlit application for the Answer Verifier.
 import os
 import sys
 import requests
-import json
-from typing import List, Dict, Any
-import io
 
 import streamlit as st
 from dotenv import load_dotenv
