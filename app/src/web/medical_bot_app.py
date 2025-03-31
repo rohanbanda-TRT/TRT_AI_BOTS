@@ -20,7 +20,7 @@ def get_medical_response(question):
     """Call the FastAPI backend to get a response for the medical question"""
     try:
         response = requests.post(
-            "http://localhost:8000/api/medical-bot/consult",
+            "https://trt-demo-ai-bots.demotrt.com/api/medical-bot/consult",
             json={"question": question}
         )
         response.raise_for_status()  # Raise an exception for HTTP errors

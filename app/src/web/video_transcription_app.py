@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 # Constants
-API_BASE_URL = "http://localhost:8000/api"  # Update with your API URL
+API_BASE_URL = "http://127.0.0.1:8000/api"  # Updated to localhost for testing
 ALLOWED_EXTENSIONS = ['.mp4', '.avi', '.mov', '.mkv', '.wmv', '.flv', '.webm']
 
 # Initialize session state

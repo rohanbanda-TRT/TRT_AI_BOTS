@@ -8,7 +8,7 @@ import base64
 from typing import Dict, Any, Optional
 
 # API configuration
-API_URL = "http://localhost:8000"
+API_URL = "https://trt-demo-ai-bots.demotrt.com"
 TIMEOUT = 10  # seconds
 
 def check_api_connection() -> bool:

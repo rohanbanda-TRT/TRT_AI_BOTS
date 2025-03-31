@@ -48,7 +48,7 @@ def analyze_dsp_performance(messages):
     """
     try:
         response = requests.post(
-            'https://lokitech-demo-api.demotrt.com/analyze-performance',
+            'https://trt-demo-ai-bots.demotrt.com/analyze-performance',
             headers={
                 'accept': 'application/json',
                 'Content-Type': 'application/json'

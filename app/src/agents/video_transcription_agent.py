@@ -38,43 +38,60 @@ class VideoTranscriptionAgent:
             model_name: The name of the OpenAI model to use
             temperature: The temperature setting for the model
         """
-        self.model_name = model_name
-        self.temperature = temperature
-        self.whisper_model = None
-        self.index_name = "video-transcriptions"
-        self.dimension = 3072
-        
-        # Initialize LLM
-        self.llm = ChatOpenAI(
-            model=model_name,
-            temperature=temperature
-        )
-        
-        # Initialize embeddings
-        self.embeddings = OpenAIEmbeddings(
-            model="text-embedding-3-large",
-            dimensions=self.dimension
-        )
-        
-        # Initialize Pinecone
-        self._initialize_pinecone()
-        
-        # Create prompt template
-        self.prompt = ChatPromptTemplate.from_messages([
-            ("system", VIDEO_TRANSCRIPTION_PROMPT),
-            ("human", "Transcription: {transcription}\n\nQuestion: {question}")
-        ])
+        # Initialize logging first to ensure it's available for all operations
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
+        handler = logging.StreamHandler()
+        handler.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
+
+        try:
+            self.logger.debug("Initializing Video Transcription Agent")
+            self.model_name = model_name
+            self.temperature = temperature
+            self.whisper_model = None
+            self.index_name = "video-transcriptions"
+            self.dimension = 3072
+            
+            # Initialize LLM
+            self.llm = ChatOpenAI(
+                model=model_name,
+                temperature=temperature
+            )
+            
+            # Initialize embeddings
+            self.embeddings = OpenAIEmbeddings(
+                model="text-embedding-3-large",
+                dimensions=self.dimension
+            )
+            
+            # Initialize Pinecone
+            self._initialize_pinecone()
+            
+            # Create prompt template
+            self.prompt = ChatPromptTemplate.from_messages([
+                ("system", VIDEO_TRANSCRIPTION_PROMPT),
+                ("human", "Transcription: {transcription}\n\nQuestion: {question}")
+            ])
+            
+            self.logger.info("Video Transcription Agent initialized")
+        except Exception as e:
+            self.logger.error("Error initializing Video Transcription Agent: %s", str(e))
+            raise
     
     def _initialize_pinecone(self):
         """Initialize Pinecone vector store"""
         try:
+            self.logger.debug("Initializing Pinecone with index: %s", self.index_name)
             pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
             
             # Check if index exists
             indexes = [index.name for index in pc.list_indexes()]
             
             if self.index_name not in indexes:
-                logger.info(f"Creating new Pinecone index: {self.index_name}")
+                self.logger.info(f"Creating new Pinecone index: {self.index_name}")
                 pc.create_index(
                     name=self.index_name,
                     dimension=self.dimension,
@@ -88,10 +105,9 @@ class VideoTranscriptionAgent:
                 embedding=self.embeddings
             )
             
-            logger.info(f"Pinecone initialized with index: {self.index_name}")
-            
+            self.logger.info("Pinecone initialized with index: %s", self.index_name)
         except Exception as e:
-            logger.error(f"Error initializing Pinecone: {str(e)}")
+            self.logger.error("Error initializing Pinecone: %s", str(e))
             raise
     
     def extract_audio(self, video_path: str, audio_path: str):
@@ -103,6 +119,7 @@ class VideoTranscriptionAgent:
             audio_path: Path where the extracted audio will be saved
         """
         try:
+            self.logger.debug("Extracting audio from video: %s", video_path)
             if not os.path.exists(video_path):
                 raise FileNotFoundError(f"Video file not found: {video_path}")
             
@@ -117,13 +134,12 @@ class VideoTranscriptionAgent:
             ]
             
             subprocess.run(command, check=True, capture_output=True)
-            logger.info(f"Audio extracted to {audio_path}")
-            
+            self.logger.info("Audio extracted to %s", audio_path)
         except subprocess.CalledProcessError as e:
-            logger.error(f"FFmpeg error: {e.stderr.decode()}")
+            self.logger.error("FFmpeg error: %s", e.stderr.decode())
             raise
         except Exception as e:
-            logger.error(f"Error extracting audio: {str(e)}")
+            self.logger.error("Error extracting audio: %s", str(e))
             raise
     
     def transcribe_audio(self, audio_path: str) -> str:
@@ -136,15 +152,22 @@ class VideoTranscriptionAgent:
         Returns:
             Transcription text
         """
-        if not os.path.exists(audio_path):
-            raise FileNotFoundError(f"Audio file not found: {audio_path}")
-        
-        # Load model if not already loaded
-        if self.whisper_model is None:
-            self.whisper_model = whisper.load_model("base")
-        
-        result = self.whisper_model.transcribe(audio_path)
-        return result["text"]
+        try:
+            self.logger.debug("Starting transcription for audio: %s", audio_path)
+            if not os.path.exists(audio_path):
+                raise FileNotFoundError(f"Audio file not found: {audio_path}")
+            
+            # Load model if not already loaded
+            if self.whisper_model is None:
+                self.whisper_model = whisper.load_model("base")
+            
+            result = self.whisper_model.transcribe(audio_path)
+            transcription = result["text"]
+            self.logger.info("Transcription completed for audio: %s", audio_path)
+            return transcription
+        except Exception as e:
+            self.logger.error("Error in audio transcription: %s", str(e))
+            raise
     
     def transcribe_video(self, video_path: str) -> str:
         """
@@ -157,6 +180,7 @@ class VideoTranscriptionAgent:
             Transcription text
         """
         try:
+            self.logger.debug("Starting video transcription for: %s", video_path)
             # Create temporary file for audio
             with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as temp_audio:
                 audio_path = temp_audio.name
@@ -169,10 +193,11 @@ class VideoTranscriptionAgent:
             if os.path.exists(audio_path):
                 os.remove(audio_path)
             
+            self.logger.info("Transcription completed for video: %s", video_path)
             return transcription
             
         except Exception as e:
-            logger.error(f"Error in video transcription: {str(e)}")
+            self.logger.error("Error in video transcription: %s", str(e))
             raise
     
     def store_transcription(self, video_id: str, video_name: str, transcription: str) -> str:
@@ -188,6 +213,7 @@ class VideoTranscriptionAgent:
             ID of the stored document
         """
         try:
+            self.logger.debug("Storing transcription for video: %s", video_name)
             # Create metadata
             metadata = {
                 "video_id": video_id,
@@ -203,11 +229,11 @@ class VideoTranscriptionAgent:
                 ids=[doc_id]
             )
             
-            logger.info(f"Transcription stored in Pinecone with ID: {doc_id}")
+            self.logger.info("Transcription stored in Pinecone with ID: %s", doc_id)
             return doc_id
             
         except Exception as e:
-            logger.error(f"Error storing transcription: {str(e)}")
+            self.logger.error("Error storing transcription: %s", str(e))
             raise
     
     def retrieve_transcription(self, video_id: str) -> Optional[str]:
@@ -221,6 +247,7 @@ class VideoTranscriptionAgent:
             Transcription text if found, None otherwise
         """
         try:
+            self.logger.debug("Retrieving transcription for video ID: %s", video_id)
             doc_id = f"video-{video_id}"
             results = self.vector_store.similarity_search(
                 query="",
@@ -229,12 +256,15 @@ class VideoTranscriptionAgent:
             )
             
             if results and len(results) > 0:
-                return results[0].page_content
+                transcription = results[0].page_content
+                self.logger.info("Transcription retrieved for video ID: %s", video_id)
+                return transcription
             
+            self.logger.warning("No transcription found for video ID: %s", video_id)
             return None
             
         except Exception as e:
-            logger.error(f"Error retrieving transcription: {str(e)}")
+            self.logger.error("Error retrieving transcription: %s", str(e))
             return None
     
     def similarity_search(self, question: str, k: int = 3) -> List[Dict[str, Any]]:
@@ -249,11 +279,13 @@ class VideoTranscriptionAgent:
             List of relevant documents
         """
         try:
+            self.logger.debug("Performing similarity search for question: %s", question)
             results = self.vector_store.similarity_search(
                 query=question,
                 k=k
             )
             
+            self.logger.info("Similarity search completed with %d results", len(results))
             return [
                 {
                     "content": doc.page_content,
@@ -263,7 +295,7 @@ class VideoTranscriptionAgent:
             ]
             
         except Exception as e:
-            logger.error(f"Error in similarity search: {str(e)}")
+            self.logger.error("Error in similarity search: %s", str(e))
             return []
     
     async def process_video(self, video_path: str, video_name: str) -> Dict[str, Any]:
@@ -278,14 +310,17 @@ class VideoTranscriptionAgent:
             Dictionary with processing results
         """
         try:
+            self.logger.debug("Starting video processing for: %s", video_name)
             # Generate a unique ID for the video
             video_id = str(uuid.uuid4())
             
             # Transcribe the video
             transcription = self.transcribe_video(video_path)
+            self.logger.info("Transcription completed for video: %s", video_name)
             
             # Store transcription in Pinecone
             doc_id = self.store_transcription(video_id, video_name, transcription)
+            self.logger.info("Transcription stored for video: %s with document ID: %s", video_name, doc_id)
             
             return {
                 "status": "success",
@@ -296,7 +331,7 @@ class VideoTranscriptionAgent:
             }
             
         except Exception as e:
-            logger.error(f"Error processing video: {str(e)}")
+            self.logger.error("Error processing video: %s", str(e))
             return {
                 "status": "error",
                 "error": str(e)
@@ -315,6 +350,7 @@ class VideoTranscriptionAgent:
             Dictionary with query results
         """
         try:
+            self.logger.debug("Starting query for question: %s", question)
             # Generate conversation ID if not provided
             if conversation_id is None:
                 conversation_id = str(uuid.uuid4())
@@ -344,6 +380,7 @@ class VideoTranscriptionAgent:
             # Add AI response to history
             InMemoryChatHistory.add_message(conversation_id, "ai", answer)
             
+            self.logger.info("Query completed for question: %s", question)
             return {
                 "answer": answer,
                 "conversation_id": conversation_id,
@@ -351,7 +388,7 @@ class VideoTranscriptionAgent:
             }
             
         except Exception as e:
-            logger.error(f"Error querying video: {str(e)}")
+            self.logger.error("Error querying video: %s", str(e))
             error_msg = f"Error processing your question: {str(e)}"
             InMemoryChatHistory.add_message(conversation_id, "ai", error_msg)
             return {"answer": error_msg}

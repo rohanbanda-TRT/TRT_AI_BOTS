@@ -76,7 +76,7 @@ def generate_content(message, session_id, name=None, company=None, subject=None,
         }
             
         response = requests.post(
-            'https://lokitech-demo-api.demotrt.com/chat',
+            'https://trt-demo-ai-bots.demotrt.com/chat',
             headers={
                 'accept': 'application/json',
                 'Content-Type': 'application/json'

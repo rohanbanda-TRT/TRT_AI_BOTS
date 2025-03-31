@@ -18,7 +18,7 @@ from app.src.core.config import get_settings
 load_dotenv()
 
 # API endpoint
-API_URL = "http://127.0.0.1:8000"
+API_URL = "https://trt-demo-ai-bots.demotrt.com"
 
 # Set page config
 st.set_page_config(
