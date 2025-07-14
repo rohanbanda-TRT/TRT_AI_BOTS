@@ -1,0 +1,18 @@
+# Agentic RAG system requirements (app_2)
+fastapi
+uvicorn
+langgraph
+langchain
+langchain-openai
+pinecone
+python-dotenv
+pydantic
+pillow
+pytesseract
+python-pptx
+openai
+numpy
+requests
+streamlit
+python-multipart
+langchain_community
