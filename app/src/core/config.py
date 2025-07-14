@@ -25,6 +25,12 @@ class Settings(BaseSettings):
     
     # Pinecone settings for test verification system
     PINECONE_API_KEY: str = os.environ.get("PINECONE_API_KEY", "")
+    
+    # AWS settings
+    AWS_ACCESS_KEY_ID: str = os.environ.get("AWS_ACCESS_KEY_ID", "")
+    AWS_SECRET_ACCESS_KEY: str = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
+    AWS_REGION: str = os.environ.get("AWS_REGION", "ap-south-1")
+    S3_BUCKET_NAME: str = os.environ.get("S3_BUCKET_NAME", "auction-listing-poc")
 
     class Config:
         env_file = ".env"

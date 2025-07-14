@@ -5,6 +5,7 @@ from .src.api.document_routes import router as document_router
 from .src.api.medical_bot_routes import router as medical_bot_router
 from .src.api.video_transcription_routes import router as video_transcription_router
 from .src.api.interior_design_routes import router as interior_design_router
+from .src.api.menu_extraction_routes import router as menu_extraction_router
 
 app = FastAPI(title="TRT AI Bots API")
 
@@ -23,6 +24,7 @@ app.include_router(document_router, prefix="/api")
 app.include_router(medical_bot_router, prefix="/api")
 app.include_router(video_transcription_router, prefix="/api")
 app.include_router(interior_design_router, prefix="/api")
+app.include_router(menu_extraction_router, prefix="/api")
 
 if __name__ == "__main__":
     import uvicorn

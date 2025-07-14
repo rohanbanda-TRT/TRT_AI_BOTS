@@ -20,7 +20,7 @@ st.set_page_config(
 )
 
 # Constants
-API_BASE_URL = "https://trt-demo-ai-bots.demotrt.com/api"  # Update with your API URL
+API_BASE_URL = "http://127.0.0.1:8000/api"  # Update with your API URL
 ALLOWED_EXTENSIONS = ['.pdf', '.docx', '.pptx', '.ppt', '.xlsx', '.xls', '.html', '.htm', '.txt']
 
 # Initialize session state

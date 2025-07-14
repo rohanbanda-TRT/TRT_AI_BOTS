@@ -96,7 +96,7 @@ class VideoTranscriptionAgent:
                     name=self.index_name,
                     dimension=self.dimension,
                     metric="cosine",
-                    spec=ServerlessSpec(cloud="aws", region="us-west-2")
+                    spec=ServerlessSpec(cloud="aws", region="us-east-1")
                 )
             
             # Initialize vector store
