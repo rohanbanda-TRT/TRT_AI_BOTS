@@ -2,8 +2,8 @@ import streamlit as st
 import os
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from agent.soil_logic import SoilSuitabilityAnalyzer, SoilParameters
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
+from app.src.agents.soil_logic import SoilSuitabilityAnalyzer
 from dotenv import load_dotenv
 
 # Load environment variables

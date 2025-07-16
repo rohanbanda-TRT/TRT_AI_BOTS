@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     
     # Pinecone settings for test verification system
     PINECONE_API_KEY: str = os.environ.get("PINECONE_API_KEY", "")
+    PINECONE_ENVIRONMENT: str = os.environ.get("PINECONE_ENVIRONMENT", "us-east-1")
     
     # AWS settings
     AWS_ACCESS_KEY_ID: str = os.environ.get("AWS_ACCESS_KEY_ID", "")

@@ -3,7 +3,7 @@ Merged graph construction and traversal logic from the original app_2 codebase.
 """
 
 from langgraph.graph import StateGraph, END
-from merged_app.agents.agents import (
+from app.src.agents.wine_agents import (
     analyze_query_node,
     vector_search_node,
     vision_analysis_node,

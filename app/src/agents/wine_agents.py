@@ -10,8 +10,7 @@ from dataclasses import dataclass
 from dotenv import load_dotenv
 from enum import Enum
 from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
-
+from typing import Dict, Any
 load_dotenv()
 
 @dataclass

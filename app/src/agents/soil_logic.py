@@ -60,8 +60,3 @@ def get_analyzer() -> SoilSuitabilityAnalyzer:
     if not api_key:
         raise RuntimeError("OPENAI_API_KEY environment variable is not set.")
     return SoilSuitabilityAnalyzer(openai_api_key=api_key)
-
-@router.post("/analyze-soil", response_model=SoilAnalysisResult)
-def analyze_soil(request: SoilAnalysisRequest, analyzer: SoilSuitabilityAnalyzer = Depends(get_analyzer)):
-    result = analyzer.analyze(request.soil_parameters.model_dump(), request.crop_name)
-    return SoilAnalysisResult(summary=result["summary"])
