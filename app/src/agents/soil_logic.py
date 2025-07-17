@@ -11,10 +11,11 @@ load_dotenv()
 # --- Models ---
 class SoilParameters(BaseModel):
     ph: float = Field(..., description="Soil pH value")
-    nitrogen: float = Field(..., description="Nitrogen content in mg/kg")
-    phosphorus: float = Field(..., description="Phosphorus content in mg/kg")
-    potassium: float = Field(..., description="Potassium content in mg/kg")
     organic_matter: float = Field(..., description="Organic matter percentage")
+    sand: float = Field(..., description="Sand percentage in soil texture")
+    silt: float = Field(..., description="Silt percentage in soil texture")
+    clay: float = Field(..., description="Clay percentage in soil texture")
+    electrical_conductivity: float = Field(..., description="Electrical conductivity (EC) in dS/m")
     moisture: float = Field(..., description="Soil moisture percentage")
     temperature: float = Field(..., description="Soil temperature in Celsius")
 
