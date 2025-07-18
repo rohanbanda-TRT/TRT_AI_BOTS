@@ -31,7 +31,7 @@ async def test_webhook_connection():
 
 
 # Store your n8n webhook URL - you'll get this from n8n after setting up webhook
-N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL", "http://localhost:5678/webhook/amazon-product")
+N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL", "https://automations.demotrt.com/webhook/amazon-product")
 
 @router.post("/amazon-product", response_model=WorkflowResponse)
 async def trigger_amazon_workflow(request: AmazonProductRequest):
@@ -107,7 +107,7 @@ async def get_workflow_status(execution_id: str):
     try:
         # You'll need to implement this based on your n8n API
         # This is a placeholder for checking execution status
-        n8n_api_url = os.getenv("N8N_API_URL", "http://localhost:5678/api/v1")
+        n8n_api_url = os.getenv("N8N_API_URL", "https://automations.demotrt.com/api/v1")
         
         async with httpx.AsyncClient() as client:
             response = await client.get(
