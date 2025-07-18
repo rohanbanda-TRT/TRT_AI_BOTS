@@ -20,3 +20,12 @@ whisper
 python-multipart
 ffmpeg-python
 openai-whisper
+
+
+requests
+beautifulsoup4
+pyngrok
+nest-asyncio    
+langgraph
+
+
