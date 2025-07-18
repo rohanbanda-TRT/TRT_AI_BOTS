@@ -33,7 +33,7 @@ class MenuExtractionAgent:
     4. Handle multiple images at once
     """
     
-    def __init__(self, openai_api_key: Optional[str] = None, api_url: str = "http://127.0.0.1:8000/api"):
+    def __init__(self, openai_api_key: Optional[str] = None, api_url: str = "https://trt-demo-ai-bots.demotrt.com/api"):
         """
         Initialize the Menu Extraction Agent.
         

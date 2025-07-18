@@ -33,6 +33,10 @@ class Settings(BaseSettings):
     AWS_REGION: str = os.environ.get("AWS_REGION", "ap-south-1")
     S3_BUCKET_NAME: str = os.environ.get("S3_BUCKET_NAME", "auction-listing-poc")
 
+    openai_api_key_tpn: str | None = None  
+    runway_api_key: str | None = None
+    n8n_webhook_url: str | None = None
+
     class Config:
         env_file = ".env"
         env_file_encoding = 'utf-8'
