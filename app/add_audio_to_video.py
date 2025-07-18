@@ -10,6 +10,7 @@ import subprocess
 import argparse
 import logging
 import uuid
+from cleanup import cleanup_temp_directories
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, 
@@ -107,6 +108,14 @@ def add_audio_to_video(video_path: str, audio_path: str, output_path: str = None
             }
         
         logger.info(f"Successfully added audio to video: {output_path}")
+
+        # Clean up temporary directories now that the final video is created
+        try:
+            logger.info("Cleaning up temporary files...")
+            cleanup_temp_directories()
+        except Exception as e:
+            logger.warning(f"Could not clean up temporary files: {e}")
+
         return {
             "success": True,
             "output_path": output_path
