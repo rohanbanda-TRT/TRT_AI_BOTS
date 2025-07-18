@@ -26,8 +26,29 @@ class SoilAnalysisRequest(BaseModel):
 # --- API ROUTER LOGIC ---
 router = APIRouter(tags=["soil"])
 
+from fastapi import Request
+from langchain.memory import ConversationBufferMemory
+
+# In-memory conversation memory store (simple dict for demo)
+conversation_memories = {}
+
 @router.post("/soil/analyze", response_model=SoilAnalysisResult)
-def analyze_soil(request: SoilAnalysisRequest, analyzer: SoilSuitabilityAnalyzer = Depends(get_analyzer)):
-    """Analyze soil suitability for a specific crop."""
-    result = analyzer.analyze(request.soil_parameters.dict(), request.crop_name)
+def analyze_soil(request: SoilAnalysisRequest, analyzer: SoilSuitabilityAnalyzer = Depends(get_analyzer), req: Request = None):
+    """Analyze soil suitability for a specific crop. Optionally supports conversational memory via conversation_id in query params."""
+    conversation_id = None
+    if req:
+        conversation_id = req.query_params.get("conversation_id")
+    memory = None
+    if conversation_id:
+        if conversation_id not in conversation_memories:
+            conversation_memories[conversation_id] = ConversationBufferMemory(return_messages=True)
+        memory = conversation_memories[conversation_id]
+        # Add user message to memory (just soil parameters/crop for demo)
+        user_message = f"Soil: {request.soil_parameters.json()}\nCrop: {request.crop_name}"
+        memory.chat_memory.add_user_message(user_message)
+    # Use memory-enabled analyzer if memory is set
+    analyzer_with_memory = SoilSuitabilityAnalyzer(analyzer.client.api_key, memory=memory) if memory else analyzer
+    result = analyzer_with_memory.analyze(request.soil_parameters.dict(), request.crop_name)
+    if memory:
+        memory.chat_memory.add_ai_message(result["summary"])
     return SoilAnalysisResult(summary=result["summary"])
