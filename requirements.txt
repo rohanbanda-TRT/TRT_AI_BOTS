@@ -32,4 +32,11 @@ pyngrok
 nest-asyncio    
 langgraph
 python-pptx
-
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+pytz
+python-dateutil
+langchain_community
+email_validator
+streamlit-calendar

@@ -18,6 +18,7 @@ from .src.api.menu_extraction_routes import router as menu_extraction_router
 from .src.api.wine_api import router as wine_router
 from .src.api.soil_api import router as soil_router
 from .src.api.n8n_webhook_routes import router as n8n_webhook_router
+from .src.api.mail_routes import router as mail_router
 
 app = FastAPI(title="TRT AI Bots API")
 
@@ -39,6 +40,7 @@ app.include_router(interior_design_router, prefix="/api")
 app.include_router(menu_extraction_router, prefix="/api")
 app.include_router(script_router, prefix="/api")
 app.include_router(n8n_webhook_router, prefix="/api")
+app.include_router(mail_router, prefix="/api")
 
 # Error handling
 @app.exception_handler(Exception)
