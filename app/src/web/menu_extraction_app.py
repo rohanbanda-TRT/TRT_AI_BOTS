@@ -19,7 +19,7 @@ file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
 # API URL
-API_URL = os.getenv("API_URL", "http://127.0.0.1:8000/api")
+API_URL = os.getenv("API_URL", "https://trt-demo-ai-bots.demotrt.com/api")
 
 def check_api_connection():
     """Check if the API server is running and accessible."""

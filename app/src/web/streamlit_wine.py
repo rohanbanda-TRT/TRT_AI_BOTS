@@ -39,7 +39,7 @@ if st.session_state.chat_history and st.session_state.chat_history[-1]["role"] =
         with st.spinner("WineBot is thinking..."):
             try:
                 last_prompt = st.session_state.chat_history[-1]["content"]
-                url = "http://127.0.0.1:8000/api/wine/query/"
+                url = "https://trt-demo-ai-bots.demotrt.com/api/wine/query/"
                 response = requests.post(url, params={"question": last_prompt})
                 response.raise_for_status() # Raise an exception for bad status codes
                 answer = response.json().get("answer", "Sorry, I couldn't find an answer.")
