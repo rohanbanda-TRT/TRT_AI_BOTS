@@ -27,7 +27,7 @@ async def download_video(url: str, output_path: str) -> bool:
         bool: True if download was successful, False otherwise
     """
     try:
-        async with httpx.AsyncClient(timeout=60.0) as client:
+        async with httpx.AsyncClient(timeout=500.0) as client:
             response = await client.get(url)
             
             if response.status_code != 200:

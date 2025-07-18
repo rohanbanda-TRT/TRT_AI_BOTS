@@ -33,7 +33,7 @@ def scrape_amazon_product(url):
     
     try:
         # Send request to Amazon
-        response = requests.get(url, headers=headers, timeout=10)
+        response = requests.get(url, headers=headers, timeout=500.0)
         
         # Check if request was successful
         if response.status_code != 200:

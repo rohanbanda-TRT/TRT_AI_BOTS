@@ -452,7 +452,7 @@ async def runway_generate_endpoint(request: RunwayMLRequest):
         }
         
         # Make the API request
-        async with httpx.AsyncClient(timeout=60.0) as client:
+        async with httpx.AsyncClient(timeout=500.0) as client:
             response = await client.post(
                 f"{settings.RUNWAY_API_BASE_URL}/v1/image_to_video",
                 json={
@@ -535,7 +535,7 @@ async def runway_task_status_endpoint(request: RunwayTaskRequest):
         }
         
         # Make the API request
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with httpx.AsyncClient(timeout=500.0) as client:
             response = await client.get(
                 f"{settings.RUNWAY_API_BASE_URL}/v1/tasks/{request.task_id}",
                 headers=headers
@@ -596,7 +596,7 @@ async def runway_download_video_endpoint(request: RunwayVideoDownloadRequest):
         }
         
         # First check the task status
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with httpx.AsyncClient(timeout=500.0) as client:
             status_response = await client.get(
                 f"{settings.RUNWAY_API_BASE_URL}/v1/tasks/{request.task_id}",
                 headers=headers

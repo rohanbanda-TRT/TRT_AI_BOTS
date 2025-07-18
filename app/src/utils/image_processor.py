@@ -40,7 +40,7 @@ def download_image_from_url(
         
         # Download the image
         logger.info(f"Downloading image from {image_url}")
-        response = requests.get(image_url, stream=True, timeout=10)
+        response = requests.get(image_url, stream=True, timeout=500.0)
         response.raise_for_status()
         
         # Save the image to disk

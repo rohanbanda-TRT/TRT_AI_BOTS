@@ -40,8 +40,6 @@ with col1:
             # Basic URL validation
             if not url.startswith(('http://', 'https://')):
                 st.error("❌ Please enter a valid URL starting with http:// or https://")
-            elif 'amazon' not in url.lower():
-                st.warning("⚠️ This doesn't appear to be an Amazon URL. Continue anyway?")
             
             try:
                 with st.spinner("Processing Amazon product..."):
@@ -54,8 +52,7 @@ with col1:
                     # Make a POST request to our FastAPI backend
                     response = requests.post(
                         FASTAPI_BACKEND_URL, 
-                        json=payload,
-                        timeout=30
+                        json=payload
                     )
                     
                     if response.status_code == 200:
@@ -100,8 +97,6 @@ with col1:
                             st.error(f"**Status Code:** {response.status_code}")
                             st.error(f"**Error:** {response.text}")
                         
-            except requests.exceptions.Timeout:
-                st.error("❌ Request timed out. The workflow might still be processing.")
             except requests.exceptions.ConnectionError:
                 st.error("❌ Failed to connect to the backend. Is the FastAPI server running?")
             except requests.exceptions.RequestException as e:
@@ -117,8 +112,7 @@ with col2:
             with st.spinner("Testing connection..."):
                 # Test if backend is reachable
                 test_response = requests.get(
-                    "http://localhost:8000/api/n8n-webhook/test-webhook-connection",
-                    timeout=10
+                    "http://localhost:8000/api/n8n-webhook/test-webhook-connection"
                 )
                 
                 if test_response.status_code == 200:
