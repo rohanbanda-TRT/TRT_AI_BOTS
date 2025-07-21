@@ -33,7 +33,7 @@ def edit_image(
     """
     try:
         # Initialize OpenAI client
-        client = OpenAI(api_key=settings.OPENAI_API_KEY_TPN)
+        client = OpenAI(api_key=settings.OPENAI_API_KEY)
         
         # Prepare API call parameters
         params = {
@@ -42,7 +42,7 @@ def edit_image(
             "prompt": prompt,
             "n": 1,
             "size": size,
-            "quality": quality
+            # "quality": quality
         }
         
         # Call the API

@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
-print("DEBUG: Loaded OpenAI API key:", os.environ.get("OPENAI_API_KEY"))
 # --- Models ---
 class SoilParameters(BaseModel):
     ph: float = Field(..., description="Soil pH value")

@@ -41,6 +41,8 @@ app.include_router(menu_extraction_router, prefix="/api")
 app.include_router(script_router, prefix="/api")
 app.include_router(n8n_webhook_router, prefix="/api")
 app.include_router(mail_router, prefix="/api")
+app.include_router(wine_router, prefix="/api")
+app.include_router(soil_router, prefix="/api")
 
 # Error handling
 @app.exception_handler(Exception)

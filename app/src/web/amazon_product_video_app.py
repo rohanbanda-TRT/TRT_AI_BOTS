@@ -151,10 +151,6 @@ st.markdown("### 🔧 System Status")
 
 status_col1, status_col2 = st.columns(2)
 
-with status_col1:
-    st.markdown("**FastAPI Backend:**")
-    st.code("http://localhost:8000")
-
 with status_col2:
     st.markdown("**n8n Webhook:**")
     st.code("Check via Test Connection")
